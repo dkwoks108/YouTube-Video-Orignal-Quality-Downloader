@@ -6,7 +6,7 @@ A modern and lightweight YouTube video downloader focused on simplicity, perform
 
 ## Project Description
 
-This project provides a straightforward solution for analyzing YouTube videos and downloading available formats without unnecessary complexity. It is designed for users who want fast results, clear options, and a stable interface for everyday use.
+This project provides a free straightforward solution for analyzing YouTube videos and downloading available formats without unnecessary complexity. It is designed for users who want fast results, clear options, and a stable interface for everyday use.
 
 ---
 
