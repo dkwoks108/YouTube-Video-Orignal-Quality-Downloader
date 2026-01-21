@@ -13,7 +13,7 @@ This project provides a free straightforward solution for analyzing YouTube vide
 ## Features
 
 ### Video Downloads
-- Download videos in original quality (4K, 1440p, 1080p, 720p, and lower resolutions when available)
+- Download videos in original quality (4K, 1440p, 1080p, 720p, 480p and lower resolutions when available)
 - Support for multiple formats depending on video availability
 
 
