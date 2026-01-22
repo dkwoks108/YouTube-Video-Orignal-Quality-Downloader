@@ -1,63 +1,58 @@
-# YouTube Downloader Backend API 🚀
+# YouTube Downloader Backend API 🎯
 
-A powerful Node.js backend API for downloading YouTube videos in original quality.
-
-Created by **DKWorks108** 🎯
+Backend API for YouTube Video Original Quality Downloader by **DKWorks108**
 
 ---
 
-## 📋 Prerequisites
+## 📋 Features
 
-- Node.js (v16 or higher)
+- **Video Information Retrieval** - Fetch video metadata, thumbnails, and available qualities
+- **Multi-Quality Downloads** - Support for 4K, 1440p, 1080p, 720p, 480p, and lower
+- **Audio Extraction** - Download audio-only files in highest quality
+- **RESTful API** - Clean and simple API endpoints
+- **CORS Enabled** - Works with any frontend
+- **Error Handling** - Comprehensive error messages
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js v16 or higher
 - npm or yarn
-- Git
 
----
+### Installation
 
-## 🛠️ Installation
-
-### 1. Clone the repository
-
+1. **Clone the repository**
 ```bash
 git clone https://github.com/dkwoks108/YouTube-Video-Orignal-Quality-Downloader.git
 cd YouTube-Video-Orignal-Quality-Downloader
 ```
 
-### 2. Install dependencies
-
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-### 3. Create environment file
-
+3. **Create environment file**
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` if you want to change the port:
-```
-PORT=3000
-NODE_ENV=development
-```
+4. **Start the server**
 
----
-
-## 🚀 Running the Server
-
-### Development Mode (with auto-reload)
-
+Development mode with auto-reload:
 ```bash
 npm run dev
 ```
 
-### Production Mode
-
+Production mode:
 ```bash
 npm start
 ```
 
-The server will start at: **http://localhost:3000**
+The server will start at `http://localhost:3000`
 
 ---
 
@@ -65,9 +60,9 @@ The server will start at: **http://localhost:3000**
 
 ### 1. Health Check
 
-**GET** `/api/health`
-
 Check if the API is running.
+
+**Endpoint:** `GET /api/health`
 
 **Response:**
 ```json
@@ -79,28 +74,30 @@ Check if the API is running.
 }
 ```
 
-### 2. Get Video Information
+**Example:**
+```bash
+curl http://localhost:3000/api/health
+```
 
-**GET** `/api/info?url=<youtube_url>`
+---
+
+### 2. Get Video Information
 
 Fetch video metadata and available quality options.
 
-**Parameters:**
-- `url` (required): YouTube video URL
+**Endpoint:** `GET /api/info`
 
-**Example:**
-```bash
-curl "http://localhost:3000/api/info?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-```
+**Query Parameters:**
+- `url` (required) - YouTube video URL
 
 **Response:**
 ```json
 {
   "title": "Video Title",
   "author": "Channel Name",
-  "lengthSeconds": 213,
+  "lengthSeconds": 300,
   "viewCount": "1000000",
-  "uploadDate": "2020-01-01",
+  "uploadDate": "2024-01-01",
   "thumbnail": "https://...",
   "description": "Video description",
   "qualities": [
@@ -113,170 +110,226 @@ curl "http://localhost:3000/api/info?url=https://www.youtube.com/watch?v=dQw4w9W
     }
   ],
   "audioAvailable": true,
-  "bestAudioBitrate": 128
+  "bestAudioBitrate": 160
 }
 ```
 
+**Example:**
+```bash
+curl "http://localhost:3000/api/info?url=https://www.youtube.com/watch?v=VIDEO_ID"
+```
+
+---
+
 ### 3. Download Video
 
-**GET** `/api/download?url=<youtube_url>&quality=<quality>`
+Download a video in specified quality.
 
-Download video in specified quality.
+**Endpoint:** `GET /api/download`
 
-**Parameters:**
-- `url` (required): YouTube video URL
-- `quality` (optional): Quality label (1080p, 720p, 480p, 360p) or 'audio' for audio-only. Default: highest available
+**Query Parameters:**
+- `url` (required) - YouTube video URL
+- `quality` (optional) - Quality preference (e.g., "1080p", "720p", "audio")
+  - Use "audio" for audio-only download
+  - Defaults to "highest" if not specified
+
+**Response:**
+- File stream with appropriate headers for download
 
 **Example:**
 ```bash
-curl "http://localhost:3000/api/download?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&quality=1080p" --output video.mp4
-```
+# Download 1080p video
+curl "http://localhost:3000/api/download?url=https://www.youtube.com/watch?v=VIDEO_ID&quality=1080p" --output video.mp4
 
-**For audio only:**
-```bash
-curl "http://localhost:3000/api/download?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&quality=audio" --output audio.mp4
-```
+# Download audio only
+curl "http://localhost:3000/api/download?url=https://www.youtube.com/watch?v=VIDEO_ID&quality=audio" --output audio.mp4
 
----
-
-## 🎨 Frontend Integration
-
-To use this backend with your frontend, update the API URL in your HTML file:
-
-```javascript
-const API_URL = 'http://localhost:3000';
-
-// Fetch video info
-fetch(`${API_URL}/api/info?url=${videoUrl}`)
-  .then(res => res.json())
-  .then(data => console.log(data));
-
-// Download video
-window.open(`${API_URL}/api/download?url=${videoUrl}&quality=1080p`);
+# Download highest quality available
+curl "http://localhost:3000/api/download?url=https://www.youtube.com/watch?v=VIDEO_ID" --output video.mp4
 ```
 
 ---
 
-## 📦 Dependencies
+## 🛠️ Technology Stack
 
-- **express**: Web framework
-- **cors**: Enable CORS
-- **ytdl-core**: YouTube video downloader
-- **dotenv**: Environment variable management
-- **nodemon**: Development auto-reload (dev dependency)
+- **Express.js** - Web framework
+- **ytdl-core** - YouTube video downloader
+- **cors** - CORS middleware
+- **dotenv** - Environment variables
 
 ---
 
-## 🌐 Deployment
+## ⚙️ Configuration
+
+Create a `.env` file in the root directory:
+
+```env
+PORT=3000
+NODE_ENV=development
+```
+
+### Environment Variables
+
+- `PORT` - Server port (default: 3000)
+- `NODE_ENV` - Environment mode (development/production)
+
+---
+
+## 🚢 Deployment
 
 ### Deploy to Heroku
 
-1. Create Heroku app:
+1. Install Heroku CLI
+2. Login to Heroku:
+```bash
+heroku login
+```
+
+3. Create a new app:
 ```bash
 heroku create your-app-name
 ```
 
-2. Push to Heroku:
+4. Deploy:
 ```bash
 git push heroku main
 ```
 
-3. Open your app:
+5. Open your app:
 ```bash
 heroku open
 ```
 
 ### Deploy to Railway
 
-1. Install Railway CLI:
-```bash
-npm install -g @railway/cli
-```
-
-2. Login and deploy:
+1. Install Railway CLI
+2. Login:
 ```bash
 railway login
+```
+
+3. Initialize project:
+```bash
 railway init
+```
+
+4. Deploy:
+```bash
 railway up
 ```
 
 ### Deploy to Vercel
 
-Create `vercel.json`:
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "server.js"
-    }
-  ]
-}
+1. Install Vercel CLI:
+```bash
+npm i -g vercel
 ```
 
-Then deploy:
+2. Deploy:
 ```bash
-npm install -g vercel
 vercel
+```
+
+---
+
+## 📝 Usage Examples
+
+### JavaScript/Fetch API
+
+```javascript
+// Get video info
+fetch('http://localhost:3000/api/info?url=https://www.youtube.com/watch?v=VIDEO_ID')
+  .then(res => res.json())
+  .then(data => console.log(data));
+
+// Download video
+window.location.href = 'http://localhost:3000/api/download?url=https://www.youtube.com/watch?v=VIDEO_ID&quality=1080p';
+```
+
+### Python
+
+```python
+import requests
+
+# Get video info
+url = "http://localhost:3000/api/info"
+params = {"url": "https://www.youtube.com/watch?v=VIDEO_ID"}
+response = requests.get(url, params=params)
+print(response.json())
+
+# Download video
+download_url = "http://localhost:3000/api/download"
+params = {"url": "https://www.youtube.com/watch?v=VIDEO_ID", "quality": "1080p"}
+response = requests.get(download_url, params=params, stream=True)
+with open("video.mp4", "wb") as f:
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
+```
+
+### cURL
+
+```bash
+# Get video info
+curl "http://localhost:3000/api/info?url=https://www.youtube.com/watch?v=VIDEO_ID"
+
+# Download video
+curl "http://localhost:3000/api/download?url=https://www.youtube.com/watch?v=VIDEO_ID&quality=1080p" -o video.mp4
 ```
 
 ---
 
 ## 🔧 Troubleshooting
 
-### Port already in use
-Change the PORT in `.env` file to a different number.
+### Common Issues
 
-### ytdl-core errors
-YouTube sometimes updates their APIs. Update ytdl-core:
-```bash
-npm update ytdl-core
-```
+**Issue:** `Error: Cannot find module 'ytdl-core'`
+**Solution:** Run `npm install` to install dependencies
 
-### CORS errors
-Make sure CORS is enabled in server.js (already configured).
+**Issue:** `Port already in use`
+**Solution:** Change PORT in `.env` file or kill the process using the port
+
+**Issue:** `Invalid YouTube URL`
+**Solution:** Ensure the URL is a valid YouTube video URL
+
+**Issue:** `Video unavailable`
+**Solution:** The video might be private, age-restricted, or region-locked
 
 ---
 
 ## ⚠️ Legal Notice
 
-This tool is for educational purposes. Always respect:
+This tool is for educational purposes only. Please respect:
 - YouTube's Terms of Service
 - Copyright laws
-- Content creator rights
+- Content creators' rights
 
 Only download content you have permission to use.
 
 ---
 
-## 📄 License
-
-MIT License - Created by DKWorks108
-
----
-
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to:
-- Report bugs
-- Suggest features
-- Submit pull requests
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📞 Support
+## 📄 License
 
-For issues or questions:
-- GitHub Issues: https://github.com/dkwoks108/YouTube-Video-Orignal-Quality-Downloader/issues
-- GitHub Profile: https://github.com/dkwoks108
+MIT License - See LICENSE file for details
 
 ---
 
-Made with ❤️ by **DKWorks108** 🎯
+## 👨‍💻 Author
+
+**DKWorks108** 🎯
+- GitHub: [@dkwoks108](https://github.com/dkwoks108)
+
+---
+
+## 🌟 Support
+
+If you find this project helpful, please give it a star! ⭐
+
+---
+
+Made with ❤️ by DKWorks108
