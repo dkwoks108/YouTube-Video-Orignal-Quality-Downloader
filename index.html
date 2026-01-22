@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Original Quality Download</title>
-
-
-  <style>
+    <title>YouTube Video Original Quality Downloader - DKWorks108</title>
+    <style>
 :root {
     --primary: #00eaff;
     --secondary: #7c7cff;
     --bg-dark: #05050a;
     --glass: rgba(255,255,255,0.08);
     --border: rgba(255,255,255,0.15);
+    --success: #00ff88;
+    --error: #ff4757;
 }
 
 * {
@@ -23,49 +23,64 @@
 
 body {
     font-family: 'Inter', 'Segoe UI', sans-serif;
-    background:
-        radial-gradient(circle at top, #10102a, #05050a 70%);
+    background: radial-gradient(circle at top, #10102a, #05050a 70%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #fff;
+    padding: 20px 0;
 }
-      
 
 .container {
     width: 92%;
-    max-width: 640px;
+    max-width: 680px;
     padding: 40px;
     border-radius: 24px;
-    background: linear-gradient(
-        145deg,
-        rgba(255,255,255,0.10),
-        rgba(255,255,255,0.02)
-    );
+    background: linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
     backdrop-filter: blur(18px);
     border: 1px solid var(--border);
-    box-shadow:
-        0 0 40px rgba(0,234,255,0.12),
-        inset 0 0 20px rgba(255,255,255,0.05);
+    box-shadow: 0 0 40px rgba(0,234,255,0.12), inset 0 0 20px rgba(255,255,255,0.05);
+    margin: 20px 0;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 .logo {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin-bottom: 10px;
     filter: drop-shadow(0 0 15px var(--primary));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
 }
 
 h1 {
     font-size: 1.8rem;
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .subtitle {
     font-size: 0.95rem;
     color: #b5c7ff;
-    margin-bottom: 28px;
+    margin-bottom: 10px;
+}
+
+.credit {
+    font-size: 0.85rem;
+    color: #888;
+    font-style: italic;
 }
 
 .input-group {
@@ -78,9 +93,7 @@ h1 {
     padding: 16px 55px 16px 18px;
     font-size: 15px;
     border-radius: 14px;
-    
     background: rgba(0,0,0,0.6);
-    
     border: 1px solid var(--border);
     color: #fff;
     outline: none;
@@ -90,6 +103,10 @@ h1 {
 .url-input:focus {
     border-color: var(--primary);
     box-shadow: 0 0 20px rgba(0,234,255,0.4);
+}
+
+.url-input::placeholder {
+    color: #666;
 }
 
 .paste-btn {
@@ -105,6 +122,11 @@ h1 {
     font-size: 12px;
     cursor: pointer;
     font-weight: 600;
+    transition: 0.3s;
+}
+
+.paste-btn:hover {
+    transform: translateY(-50%) scale(1.05);
 }
 
 .fetch-btn {
@@ -121,9 +143,14 @@ h1 {
     box-shadow: 0 12px 30px rgba(0,234,255,0.4);
 }
 
-.fetch-btn:hover {
+.fetch-btn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 20px 45px rgba(0,234,255,0.6);
+}
+
+.fetch-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .loading {
@@ -134,13 +161,13 @@ h1 {
 }
 
 .spinner {
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
     border: 3px solid rgba(255,255,255,0.2);
     border-top: 3px solid var(--primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin: auto;
+    margin: 0 auto 15px;
 }
 
 @keyframes spin {
@@ -154,28 +181,53 @@ h1 {
     border-radius: 18px;
     padding: 22px;
     border: 1px solid var(--border);
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .video-thumbnail {
     width: 100%;
     border-radius: 14px;
     margin-bottom: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
 .video-title {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 600;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
+    line-height: 1.4;
 }
 
 .video-details {
     font-size: 0.85rem;
-    color: #ccc;
+    color: #aaa;
+    line-height: 1.6;
+}
+
+.video-details strong {
+    color: var(--primary);
 }
 
 .quality-options {
     display: none;
     margin-top: 25px;
+}
+
+.quality-options h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
 }
 
 .quality-btn {
@@ -185,20 +237,33 @@ h1 {
     border-radius: 14px;
     border: 1px solid var(--border);
     background: rgba(0,0,0,0.5);
-    color: var(--primary);
+    color: #fff;
     font-weight: 600;
     cursor: pointer;
     transition: 0.25s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .quality-btn:hover {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: #000;
+    transform: translateX(5px);
 }
 
 .quality-btn.best {
     border-color: var(--primary);
-    box-shadow: 0 0 20px rgba(0,234,255,0.5);
+    box-shadow: 0 0 15px rgba(0,234,255,0.3);
+}
+
+.quality-badge {
+    background: rgba(0,234,255,0.2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--primary);
 }
 
 .warning {
@@ -209,6 +274,7 @@ h1 {
     border-radius: 14px;
     font-size: 13px;
     border: 1px solid rgba(255,193,7,0.4);
+    line-height: 1.6;
 }
 
 .error {
@@ -219,28 +285,97 @@ h1 {
     border-radius: 14px;
     font-size: 13px;
     border: 1px solid rgba(220,53,69,0.4);
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.success {
+    margin-top: 20px;
+    background: rgba(0,255,136,0.15);
+    color: var(--success);
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    border: 1px solid rgba(0,255,136,0.4);
+}
+
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.footer a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.progress-container {
+    display: none;
+    margin-top: 20px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    width: 0%;
+    transition: width 0.3s;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 25px;
+    }
+    
+h1 {
+        font-size: 1.5rem;
+    }
+    
+    .logo {
+        font-size: 2.5rem;
+    }
 }
 </style>
-
-
-    
-    
 </head>
 <body>
     <div class="container">
-        <div class="logo">📺</div>
-        <h1>YouTube Video Original Quality Downloader</h1>
+        <div class="header">
+            <div class="logo">📺</div>
+            <h1>YouTube Video Downloader</h1>
+            <p class="subtitle">Download in 4K & Original Quality</p>
+            <p class="credit">Created by DKWorks108 🎯</p>
+        </div>
         
         <div class="input-group">
             <input type="text" class="url-input" id="videoUrl" placeholder="Paste YouTube video URL here...">
-            <button class="paste-btn" onclick="pasteFromClipboard()">Paste</button>
+            <button class="paste-btn" onclick="pasteFromClipboard()">📋 Paste</button>
         </div>
         
-        <button class="fetch-btn" id="fetchBtn" onclick="fetchVideoInfo()">Get Video Info</button>
+        <button class="fetch-btn" id="fetchBtn" onclick="fetchVideoInfo()">🔍 Get Video Info</button>
         
         <div class="loading" id="loading">
-            <span class="spinner"></span>
-            Fetching video information...
+            <div class="spinner"></div>
+            <p>Fetching video information...</p>
         </div>
         
         <div class="video-info" id="videoInfo">
@@ -250,52 +385,59 @@ h1 {
         </div>
         
         <div class="quality-options" id="qualityOptions">
-            <h3 style="color: #333; margin-bottom: 15px;">Available Download Options:</h3>
-            <button class="quality-btn best" onclick="downloadVideo('4K')">
-                🎬 4K Ultra HD (2160p) - Original Quality
-            </button>
-            <button class="quality-btn best" onclick="downloadVideo('1440p')">
-                🎥 1440p Quad HD - High Quality
-            </button>
-            <button class="quality-btn" onclick="downloadVideo('1080p')">
-                📹 1080p Full HD
-            </button>
-            <button class="quality-btn" onclick="downloadVideo('720p')">
-                📺 720p HD
-            </button>
-            <button class="quality-btn" onclick="downloadVideo('480p')">
-                📱 480p Standard
-            </button>
-            <button class="quality-btn" onclick="downloadVideo('audio')">
-                🎵 Audio Only (MP3)
-            </button>
+            <h3>📥 Available Download Options:</h3>
+            <div id="qualityButtons"></div>
+        </div>
+        
+        <div class="progress-container" id="progressContainer">
+            <p id="progressText">Preparing download...</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
         </div>
         
         <div class="warning">
-            <strong>⚠️ Important Notice:</strong> This is a demonstration interface. Actual YouTube video downloading requires backend services and may be subject to YouTube's terms of service. Please ensure you have permission to download content and comply with applicable laws and terms of service.
+            <strong>⚠️ Important Notice:</strong> This tool uses public YouTube APIs to fetch video information. Downloads are handled through your browser. Please respect copyright laws and YouTube's Terms of Service. Only download content you have permission to use.
+        </div>
+        
+        <div class="footer">
+            Made with ❤️ by <a href="https://github.com/dkwoks108" target="_blank">DKWorks108</a> | 
+            <a href="https://github.com/dkwoks108/YouTube-Video-Orignal-Quality-Downloader" target="_blank">GitHub</a>
         </div>
     </div>
 
     <script>
-        function pasteFromClipboard() {
-            navigator.clipboard.readText().then(text => {
+        const INVIDIOUS_INSTANCES = [
+            'https://inv.nadeko.net',
+            'https://invidious.privacydev.net',
+            'https://vid.puffyan.us',
+            'https://invidious.io.lol'
+        ];
+        
+        let currentVideoData = null;
+        
+        async function pasteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
                 document.getElementById('videoUrl').value = text;
-            }).catch(err => {
-                console.error('Failed to read clipboard: ', err);
-            });
+            } catch (err) {
+                console.error('Failed to read clipboard:', err);
+                showError('Unable to read clipboard. Please paste manually.');
+            }
         }
 
         function isValidYouTubeUrl(url) {
             const patterns = [
                 /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/,
-                /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/
+                /^https?:\/\/(www\.)?youtube\.com\/embed\/[^\s]/,
+                /^https?:\/\/(www\.)?youtube\.com\/shorts\/[^\s]/
             ];
             return patterns.some(pattern => pattern.test(url));
         }
 
         function extractVideoId(url) {
             const patterns = [
-                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&\n?#]+)/
             ];
             
             for (let pattern of patterns) {
@@ -307,22 +449,56 @@ h1 {
             return null;
         }
 
-        function fetchVideoInfo() {
+        function formatDuration(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            
+            if (hrs > 0) {
+                return \\`${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}\`;
+            }
+            return \\`${mins}:${secs.toString().padStart(2, '0')}\`;
+        }
+
+        function formatViews(views) {
+            if (views >= 1000000) {
+                return (views / 1000000).toFixed(1) + 'M';
+            } else if (views >= 1000) {
+                return (views / 1000).toFixed(1) + 'K';
+            }
+            return views.toString();
+        }
+
+        async function fetchFromInvidious(videoId) {
+            for (let instance of INVIDIOUS_INSTANCES) {
+                try {
+                    const response = await fetch(`${instance}/api/v1/videos/${videoId}`, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data;
+                    }
+                } catch (err) {
+                    console.log(`Failed to fetch from ${instance}:`, err);
+                    continue;
+                }
+            }
+            throw new Error('All API instances failed');
+        }
+
+        async function fetchVideoInfo() {
             const url = document.getElementById('videoUrl').value.trim();
             const loading = document.getElementById('loading');
             const fetchBtn = document.getElementById('fetchBtn');
             const videoInfo = document.getElementById('videoInfo');
             const qualityOptions = document.getElementById('qualityOptions');
             
-            // Clear previous results
             videoInfo.style.display = 'none';
             qualityOptions.style.display = 'none';
-            
-            // Remove any existing error messages
-            const existingError = document.querySelector('.error');
-            if (existingError) {
-                existingError.remove();
-            }
+            clearMessages();
             
             if (!url) {
                 showError('Please enter a YouTube video URL');
@@ -334,76 +510,160 @@ h1 {
                 return;
             }
             
-            // Show loading
+            const videoId = extractVideoId(url);
+            if (!videoId) {
+                showError('Could not extract video ID from URL');
+                return;
+            }
+            
             loading.style.display = 'block';
             fetchBtn.disabled = true;
-            fetchBtn.textContent = 'Processing...';
+            fetchBtn.textContent = '⏳ Processing...';
             
-            // Simulate fetching video info (in real implementation, this would be an API call)
-            setTimeout(() => {
-                const videoId = extractVideoId(url);
+            try {
+                const videoData = await fetchFromInvidious(videoId);
+                currentVideoData = videoData;
                 
-                // Simulate video data (in real implementation, this would come from YouTube API or backend)
-                const videoData = {
-                    title: "Sample Video Title - Original Quality Available",
-                    thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-                    duration: "5:42",
-                    views: "1,234,567 views",
-                    uploadDate: "2 days ago"
-                };
-                
-                // Display video info
-                document.getElementById('thumbnail').src = videoData.thumbnail;
+                document.getElementById('thumbnail').src = videoData.videoThumbnails?.[videoData.videoThumbnails.length - 1]?.url || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
                 document.getElementById('videoTitle').textContent = videoData.title;
                 document.getElementById('videoDetails').innerHTML = `
-                    <strong>Duration:</strong> ${videoData.duration}<br>
-                    <strong>Views:</strong> ${videoData.views}<br>
-                    <strong>Uploaded:</strong> ${videoData.uploadDate}
+                    <strong>Duration:</strong> ${formatDuration(videoData.lengthSeconds)}<br>
+                    <strong>Views:</strong> ${formatViews(videoData.viewCount)} views<br>
+                    <strong>Author:</strong> ${videoData.author}<br>
+                    <strong>Published:</strong> ${new Date(videoData.published * 1000).toLocaleDateString()}
                 `;
                 
-                // Show video info and download options
+                generateDownloadOptions(videoData);
+                
                 loading.style.display = 'none';
                 videoInfo.style.display = 'block';
                 qualityOptions.style.display = 'block';
                 fetchBtn.disabled = false;
-                fetchBtn.textContent = 'Get Video Info';
+                fetchBtn.textContent = '🔍 Get Video Info';
                 
-            }, 2000);
+                showSuccess('Video information loaded successfully!');
+                
+            } catch (error) {
+                console.error('Error fetching video info:', error);
+                loading.style.display = 'none';
+                fetchBtn.disabled = false;
+                fetchBtn.textContent = '🔍 Get Video Info';
+                showError('Failed to fetch video information. The video might be private, restricted, or the API is temporarily unavailable. Please try again.');
+            }
         }
-        
-        function downloadVideo(quality) {
-            // In a real implementation, this would trigger the actual download
-            const url = document.getElementById('videoUrl').value;
-            const videoTitle = document.getElementById('videoTitle').textContent;
+
+        function generateDownloadOptions(videoData) {
+            const container = document.getElementById('qualityButtons');
+            container.innerHTML = '';
             
-            // Show download simulation
-            alert(`Starting download...\n\nVideo: ${videoTitle}\nQuality: ${quality}\n\nNote: This is a demonstration. In a real implementation, the download would start automatically.`);
+            const videoFormats = videoData.formatStreams || [];
+            const adaptiveFormats = videoData.adaptiveFormats || [];
+            const audioFormats = adaptiveFormats.filter(f => f.type && f.type.includes('audio'));
             
-            // You would typically make an API call to your backend here
-            // fetch('/api/download', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ url: url, quality: quality })
-            // });
-        }
-        
-        function showError(message) {
-            const container = document.querySelector('.container');
-            const existingError = document.querySelector('.error');
-            if (existingError) {
-                existingError.remove();
+            const qualityMap = {};
+            videoFormats.forEach(format => {
+                const quality = format.qualityLabel || format.quality;
+                if (quality && !qualityMap[quality]) {
+                    qualityMap[quality] = format;
+                }
+            });
+            
+            const qualities = Object.keys(qualityMap).sort((a, b) => {
+                const aNum = parseInt(a);
+                const bNum = parseInt(b);
+                return bNum - aNum;
+            });
+            
+            if (qualities.length > 0) {
+                qualities.forEach((quality, index) => {
+                    const format = qualityMap[quality];
+                    const button = document.createElement('button');
+                    button.className = index < 2 ? 'quality-btn best' : 'quality-btn';
+                    button.innerHTML = `
+                        <span>🎬 ${quality} ${format.container ? \\`(${format.container.toUpperCase()})\` : ''}</span>
+                        ${index === 0 ? '<span class="quality-badge">BEST</span>' : ''}
+                    `;
+                    button.onclick = () => downloadVideo(format.url, \\`${videoData.title} - ${quality}.${format.container || 'mp4'}\`);
+                    container.appendChild(button);
+                });
             }
             
+            if (audioFormats.length > 0) {
+                const bestAudio = audioFormats.reduce((best, current) => {
+                    return (current.bitrate > best.bitrate) ? current : best;
+                });
+                
+                const audioButton = document.createElement('button');
+                audioButton.className = 'quality-btn';
+                audioButton.innerHTML = `
+                    <span>🎵 Audio Only (${Math.round(bestAudio.bitrate / 1000)}kbps)</span>
+                `;
+                audioButton.onclick = () => downloadVideo(bestAudio.url, \\`${videoData.title} - Audio.${bestAudio.container || 'mp4'}\`);
+                container.appendChild(audioButton);
+            }
+            
+            if (qualities.length === 0 && audioFormats.length === 0) {
+                container.innerHTML = '<p style="color: #ff9aa9;">No downloadable formats available for this video.</p>';
+            }
+        }
+
+        function downloadVideo(url, filename) {
+            try {
+                showSuccess('Starting download... Your browser will handle the download.');
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename.replace(/[<>:"/\\|?*]/g, '_');
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                showError('Download failed. Please try again or try a different quality.');
+            }
+        }
+
+        function showError(message) {
+            clearMessages();
+            const container = document.querySelector('.container');
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error';
-            errorDiv.innerHTML = `<strong>Error:</strong> ${message}`;
+            errorDiv.innerHTML = `<strong>❌ Error:</strong> ${message}`;
             container.appendChild(errorDiv);
+            
+            setTimeout(() => errorDiv.remove(), 5000);
         }
         
-        // Allow Enter key to trigger fetch
+        function showSuccess(message) {
+            clearMessages();
+            const container = document.querySelector('.container');
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success';
+            successDiv.innerHTML = `<strong>✅ Success:</strong> ${message}`;
+            container.appendChild(successDiv);
+            
+            setTimeout(() => successDiv.remove(), 5000);
+        }
+        
+        function clearMessages() {
+            document.querySelectorAll('.error, .success').forEach(el => el.remove());
+        }
+        
         document.getElementById('videoUrl').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 fetchVideoInfo();
+            }
+        });
+        
+        window.addEventListener('load', async () => {
+            try {
+                const clipboardText = await navigator.clipboard.readText();
+                if (clipboardText && isValidYouTubeUrl(clipboardText)) {
+                    document.getElementById('videoUrl').value = clipboardText;
+                }
+            } catch (err) {
             }
         });
     </script>
